@@ -14,9 +14,9 @@ namespace resultys.prospecta.rules
 
     public class QualificaRules
     {
-        public ProjectDelegate onQualificado { get; set; }
-        public ProjectDelegate onNaoQualificado { get; set; }
-        public ProjectDelegate onForceQualificacao { get; set; }
+        public ProjetoDelegate onQualificado { get; set; }
+        public ProjetoDelegate onNaoQualificado { get; set; }
+        public ProjetoDelegate onForceQualificacao { get; set; }
         public QualificaRulesEmptyDelegate onEmpty { get; set; }
 
         public ReceitaWorker receitaWorker { get; set; }
@@ -31,14 +31,14 @@ namespace resultys.prospecta.rules
             this.siteWorker = new SiteWorker();
             this.telefoneWorker = new TelefoneWorker();
 
-            this.receitaWorker.onEmpty += new ProjectEmptyDelegate(onReceitaEmpty);
-            this.receitaWorker.onSuccess += new ProjectDelegate(onReceitaSuccess);
+            this.receitaWorker.onEmpty += new FilaDelegate(onReceitaEmpty);
+            this.receitaWorker.onSuccess += new ProjetoDelegate(onReceitaSuccess);
 
-            this.siteWorker.onSuccess += new ProjectDelegate(onSiteSuccess);
+            this.siteWorker.onSuccess += new ProjetoDelegate(onSiteSuccess);
 
-            this.telefoneWorker.onQualificado += new ProjectDelegate(onTelefoneQualificado);
-            this.telefoneWorker.onNaoQualificado += new ProjectDelegate(onTelefoneNaoQualificado);
-            this.telefoneWorker.onForceQualificado += new ProjectDelegate(onForceQualificado);
+            this.telefoneWorker.onQualificado += new ProjetoDelegate(onTelefoneQualificado);
+            this.telefoneWorker.onNaoQualificado += new ProjetoDelegate(onTelefoneNaoQualificado);
+            this.telefoneWorker.onForceQualificado += new ProjetoDelegate(onForceQualificado);
         }
 
         public void start()

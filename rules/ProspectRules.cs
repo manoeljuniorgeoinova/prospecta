@@ -18,9 +18,9 @@ namespace resultys.prospecta.rules
             var qualificaRules = new QualificaRules();
 
             qualificaRules.onEmpty += new QualificaRulesEmptyDelegate(onEmpty);
-            qualificaRules.onQualificado += new ProjectDelegate(onQualificado);
-            qualificaRules.onNaoQualificado += new ProjectDelegate(onNaoQualificado);
-            qualificaRules.onForceQualificacao += new ProjectDelegate(onForceQualificacao);
+            qualificaRules.onQualificado += new ProjetoDelegate(onQualificado);
+            qualificaRules.onNaoQualificado += new ProjetoDelegate(onNaoQualificado);
+            qualificaRules.onForceQualificacao += new ProjetoDelegate(onForceQualificacao);
 
             qualificaRules.start();
         }

@@ -13,7 +13,7 @@ namespace resultys.prospecta.worker
     {
 
         public ReceitaWorker() : base() {
-            this.onWork += new ProjectDelegate(work);
+            this.onWork += new ProjetoDelegate(work);
         }
 
         public void work(Projeto projeto)

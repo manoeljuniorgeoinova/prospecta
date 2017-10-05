@@ -20,7 +20,7 @@ namespace resultys.prospecta.lib
             this.projetos = new List<Projeto>();
         }
 
-        public void each(ProjectDelegate lambda)
+        public void each(ProjetoDelegate lambda)
         {
             lock (this.obj)
             {
@@ -31,7 +31,7 @@ namespace resultys.prospecta.lib
             }
         }
 
-        public void exclusive(ProjectDelegate lambda)
+        public void exclusive(ProjetoDelegate lambda)
         {
             lock (this.obj)
             {
@@ -44,6 +44,14 @@ namespace resultys.prospecta.lib
             lock (this.obj)
             {
                 this.projetos.Add(projeto);
+            }
+        }
+
+        public void addFirst(Projeto projeto)
+        {
+            lock (this.obj)
+            {
+                this.projetos.Insert(0, projeto);
             }
         }
 

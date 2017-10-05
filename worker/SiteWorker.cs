@@ -12,7 +12,7 @@ namespace resultys.prospecta.worker
     public class SiteWorker : WorkerAbstract
     {        
         public SiteWorker() : base() {
-            this.onWork += new ProjectDelegate(work);
+            this.onWork += new ProjetoDelegate(work);
         }
 
         public void work(Projeto projeto)

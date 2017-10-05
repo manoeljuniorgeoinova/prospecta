@@ -11,6 +11,27 @@ namespace resultys.prospecta.lib
     public class BreakProject
     {
 
+        public static Projeto[] at(Projeto projeto, int limit)
+        {
+            var p1 = projeto.clone();
+            var p2 = projeto.clone();
+
+            p1.empresas = new List<Empresa>();
+            p2.empresas = new List<Empresa>();
+
+            for (int i = 0; i < limit; i++)
+            {
+                p1.empresas.Add(projeto.empresas[i]);
+            }
+
+            for (int i = limit; i < projeto.empresas.Count; i++)
+            {
+                p2.empresas.Add(projeto.empresas[i]);
+            }
+
+            return new Projeto[2] { p1, p2 };
+        }
+
         public static Projeto[] atEmpresasAtualizadasSite(Projeto projeto)
         {
             var quantidadeDias = projeto.config.validate_site;

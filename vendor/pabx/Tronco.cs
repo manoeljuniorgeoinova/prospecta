@@ -10,25 +10,6 @@ namespace resultys.prospecta.vendor.pabx
     {
         private List<Chamada> chamadas { get; set; }
 
-        private static object objlock = new object();
-        private static int totalCanais = int.Parse(resultys.prospecta.lib.Config.read("CentralTelefonica", "quantidade_ramais"));
-        private static int _totalDisponivel = int.Parse(resultys.prospecta.lib.Config.read("CentralTelefonica", "quantidade_ramais"));
-        public static int totalDisponivel {
-            get {
-                lock (objlock)
-                {
-                    return _totalDisponivel;
-                }
-            }
-            set
-            {
-                lock (objlock)
-                {
-                    _totalDisponivel = value;
-                }
-            }
-        }
-
         public Tronco()
         {
             this.chamadas = new List<Chamada>();
@@ -46,14 +27,7 @@ namespace resultys.prospecta.vendor.pabx
 
         public void ligar()
         {
-            var callLimit = int.Parse(resultys.prospecta.lib.Config.read("CentralTelefonica", "quantidade_ramais"));
-            var total = (int)this.chamadas.Count / callLimit;
             var telefones = this.chamadas.ToList();
-
-            for (int pageCounter = 0; pageCounter < total; pageCounter++) {
-                start(telefones, callLimit);
-            }
-
             start(telefones, telefones.Count);
         }
 

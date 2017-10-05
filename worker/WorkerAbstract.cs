@@ -10,17 +10,20 @@ using resultys.prospecta.models;
 
 namespace resultys.prospecta.worker
 {
-    public delegate void ProjectDelegate(Projeto projeto);
-    public delegate void ProjectEmptyDelegate(Fila fila);
+    public delegate void ProjetoDelegate(Projeto projeto);
+    public delegate void FilaDelegate(Fila fila);
 
     public class WorkerAbstract
     {
         protected Thread thread { get; set; }
         protected Projeto current { get; set; }
 
-        public ProjectEmptyDelegate onEmpty { get; set; }
-        public ProjectDelegate onSuccess { get; set; }
-        public ProjectDelegate onWork { get; set; }
+        public FilaDelegate onEmpty { get; set; }
+        public FilaDelegate onPreProcess { get; set; }
+
+        public ProjetoDelegate onSuccess { get; set; }
+        public ProjetoDelegate onWork { get; set; }
+
         public Fila fila { get; set; }
 
         public WorkerAbstract()
@@ -40,6 +43,7 @@ namespace resultys.prospecta.worker
                         System.Threading.Thread.Sleep(5000);
                     }
 
+                    if (this.onPreProcess != null) this.onPreProcess(this.fila);
                     this.current = this.fila.shift();
                     this.onWork(this.current);
                     this.current = null;
