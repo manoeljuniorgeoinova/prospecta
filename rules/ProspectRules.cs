@@ -25,9 +25,8 @@ namespace resultys.prospecta.rules
             qualificaRules.start();
         }
 
-        public List<Projeto> onEmpty()
+        public List<Projeto> onEmpty(List<Projeto> projetos)
         {
-            var projetos = ProjetoRepositorio.fetchEmQualificacao();
             var projetosList = new List<Projeto>();
 
             for (int i = 0; i < projetos.Count; i++)
@@ -147,7 +146,7 @@ namespace resultys.prospecta.rules
                 }
                 catch (Exception e){ }
 
-                email.send();
+                //email.send();
             }
         }
 

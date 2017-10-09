@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 using resultys.prospecta.vendor.receita;
-using resultys.prospecta.vendor.search;
 using resultys.prospecta.models;
 using resultys.prospecta.rules;
 using resultys.prospecta.lib;

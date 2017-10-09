@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>resultys.prospecta</RootNamespace>
     <AssemblyName>prospecta</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -46,9 +46,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Evoline\bin\Debug\EvolineAPI.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TotalVoice\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Npgsql, Version=3.2.2.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>packages\Npgsql.3.2.2\lib\net451\Npgsql.dll</HintPath>
@@ -61,6 +60,10 @@
     <Reference Include="Pillar, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\botnet\v2\bot\bot\bin\Debug\Pillar.dll</HintPath>
+    </Reference>
+    <Reference Include="spotnet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\spotnet\bin\Debug\spotnet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -115,6 +118,7 @@
     <Compile Include="models\projeto\Projeto.cs" />
     <Compile Include="models\prospect\Prospect.cs" />
     <Compile Include="models\contato\Telefone.cs" />
+    <Compile Include="vendor\spotnet\Spot.cs" />
     <Compile Include="worker\TelefoneWorker.cs" />
     <Compile Include="vendor\pabx\Chamada.cs" />
     <Compile Include="vendor\pabx\EmpresaChamada.cs" />
@@ -125,7 +129,6 @@
     <Compile Include="models\empresa\Empresa.cs" />
     <Compile Include="models\empresa\Socio.cs" />
     <Compile Include="vendor\receita\Receita.cs" />
-    <Compile Include="vendor\search\Telefone.cs" />
     <Compile Include="vendor\totalvoice\TotalVoiceAPI.cs" />
     <Compile Include="vendor\pabx\Central.cs" />
     <Compile Include="worker\ReceitaWorker.cs" />
@@ -139,9 +142,7 @@
   <ItemGroup>
     <Content Include="noun_17616_cc.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Filters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 using resultys.prospecta.lib;
 using resultys.prospecta.models;
@@ -10,7 +11,7 @@ using resultys.prospecta.worker;
 
 namespace resultys.prospecta.rules
 {
-    public delegate List<Projeto> QualificaRulesEmptyDelegate();
+    public delegate List<Projeto> QualificaRulesEmptyDelegate(List<Projeto> projetos);
 
     public class QualificaRules
     {
@@ -30,10 +31,8 @@ namespace resultys.prospecta.rules
             this.receitaWorker = new ReceitaWorker();
             this.siteWorker = new SiteWorker();
             this.telefoneWorker = new TelefoneWorker();
-
-            this.receitaWorker.onEmpty += new FilaDelegate(onReceitaEmpty);
+            
             this.receitaWorker.onSuccess += new ProjetoDelegate(onReceitaSuccess);
-
             this.siteWorker.onSuccess += new ProjetoDelegate(onSiteSuccess);
 
             this.telefoneWorker.onQualificado += new ProjetoDelegate(onTelefoneQualificado);
@@ -48,6 +47,53 @@ namespace resultys.prospecta.rules
             this.receitaWorker.start();
             this.siteWorker.start();
             this.telefoneWorker.start();
+
+            this.searchProjetos();
+        }
+
+        public void searchProjetos()
+        {
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    var projetos = ProjetoRepositorio.fetchEmQualificacao();
+                    var projetosLivres = new List<Projeto>();
+
+                    this.receitaWorker.fila.exclusive(p =>
+                    {
+                        foreach (var projeto in projetos)
+                        {
+                            if (this.receitaWorker.existInWork(projeto)) continue;
+                            if (this.siteWorker.existInWork(projeto)) continue;
+                            if (this.telefoneWorker.existInWork(projeto)) continue;
+
+                            projetosLivres.Add(projeto);
+                        }
+                    });
+
+                    this.receitaWorker.fila.exclusive(p => {
+                        projetos = BreakProject.atLimit(this.onEmpty(projetosLivres));
+
+                        var total = 0;
+                        foreach (var projeto in projetos)
+                        {
+                            checkTotalEmpresas(projeto);
+
+                            if (projeto.empresas.Count == 0) continue;
+                            if (this.siteWorker.existInWork(projeto)) continue;
+                            if (this.telefoneWorker.existInWork(projeto)) continue;
+
+                            this.receitaWorker.fila.add(projeto);
+                            total++;
+                        }
+
+                        if (total > 0) Log.WriteLine(String.Format("[Qualify] {0} projeto(s) inserido(s) na fila na receita", total));
+                    });
+
+                    Thread.Sleep(int.Parse(Config.read("Qualifica", "tempo_realimentacao_projetos_segundos")) * 1000);
+                }
+            }).Start();
         }
 
         private void checkTotalEmpresas(Projeto projeto)
@@ -97,31 +143,6 @@ namespace resultys.prospecta.rules
             email.send();
         }
 
-        public void onReceitaEmpty(Fila fila)
-        {
-            var projetos = BreakProject.atLimit(this.onEmpty());            
-
-            fila.exclusive(p => {
-                var total = 0;
-                for (int i = 0; i < projetos.Count; i++)
-                {
-                    var projeto = projetos[i];
-                    
-                    checkTotalEmpresas(projeto);
-
-                    if (projeto.empresas.Count == 0) continue;
-                    if (this.siteWorker.existInWork(projeto)) continue;
-                    if (this.telefoneWorker.existInWork(projeto)) continue;
-
-                    fila.add(projeto);
-
-                    total++;
-                }
-
-                if (total > 0) Log.WriteLine(String.Format("[Qualify] {0} projeto(s) inserido(s) na fila na receita", total));
-            });
-        }
-
         public void onReceitaSuccess(Projeto projeto)
         {
             Log.WriteLine(String.Format("[Qualify] projeto {0} adicionado a fila do site", projeto.getParteName()));
@@ -154,9 +175,9 @@ namespace resultys.prospecta.rules
                 {
                     if (e.contato.emails != null) e.contato.emails = String.Join(",", Higienize.removeContabilEmail(e.contato.emails.Split(',')));
 
-                    EmpresaRepositorio.update(e);
-                    EmpresaContatoRepositorio.update(e.contato);
-                    EmpresaRepositorio.updateDataAtualizacaoSite(e);
+                    //EmpresaRepositorio.update(e);
+                    //EmpresaContatoRepositorio.update(e.contato);
+                    //EmpresaRepositorio.updateDataAtualizacaoSite(e);
                 }
             }
         }

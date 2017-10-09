@@ -42,7 +42,7 @@ namespace resultys.prospecta.worker
                         if (this.onEmpty != null) this.onEmpty(this.fila);
                         System.Threading.Thread.Sleep(5000);
                     }
-
+                    
                     if (this.onPreProcess != null) this.onPreProcess(this.fila);
                     this.current = this.fila.shift();
                     this.onWork(this.current);

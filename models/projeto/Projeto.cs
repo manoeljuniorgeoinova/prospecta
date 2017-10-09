@@ -18,6 +18,7 @@ namespace resultys.prospecta.models
         public string status { get; set; }        
         public bool isForceProspeccao { get; set; }
         public string webhook { get; set; }
+        public int prioridade { get; set; }
 
         [PetaPoco.Ignore] public Prospect prospect { get; set; }
         [PetaPoco.Ignore] public List<Empresa> empresas { get; set; }
@@ -30,6 +31,7 @@ namespace resultys.prospecta.models
 
         [PetaPoco.Ignore] public ConfigureMotor config { get; set; }
         [PetaPoco.Ignore] public Cliente cliente { get; set; }
+
 
         public string getParteName()
         {

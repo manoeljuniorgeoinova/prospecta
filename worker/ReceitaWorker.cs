@@ -18,6 +18,10 @@ namespace resultys.prospecta.worker
 
         public void work(Projeto projeto)
         {
+            // remover
+            this.onSuccess(projeto);
+            return;
+
             if (!projeto.config.step_receita)
             {
                 this.onSuccess(projeto);

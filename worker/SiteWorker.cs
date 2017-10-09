@@ -47,12 +47,10 @@ namespace resultys.prospecta.worker
                 this.onSuccess(projetoAtualizado);
                 isConcat = false;
             }
-
-            System.Threading.Thread.Sleep(10000);
-
+            
             var empresas = projetoDesatualizado.empresas;
-            var telefone = new resultys.prospecta.vendor.search.Telefone();
-            empresas = telefone.pesquisar(empresas);
+            var spot = new resultys.prospecta.vendor.spotnet.Spot("spotnet.resultys.com.br");
+            empresas = spot.searchDados(empresas);
 
             projetoDesatualizado.empresas = isConcat ? empresas.Concat(projetoAtualizado.empresas).ToList() : empresas;
 

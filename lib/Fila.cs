@@ -31,6 +31,11 @@ namespace resultys.prospecta.lib
             }
         }
 
+        private void priorizar()
+        {
+            this.projetos = this.projetos.OrderBy(p => p.prioridade).ToList();
+        }
+
         public void exclusive(ProjetoDelegate lambda)
         {
             lock (this.obj)
@@ -44,6 +49,7 @@ namespace resultys.prospecta.lib
             lock (this.obj)
             {
                 this.projetos.Add(projeto);
+                this.priorizar();
             }
         }
 
@@ -52,6 +58,7 @@ namespace resultys.prospecta.lib
             lock (this.obj)
             {
                 this.projetos.Insert(0, projeto);
+                this.priorizar();
             }
         }
 
@@ -63,6 +70,7 @@ namespace resultys.prospecta.lib
             {
                 if (this.projetos.Count > 0)
                 {
+                    this.priorizar();
                     p = this.projetos[0];
                     this.projetos.RemoveAt(0);
                 }
